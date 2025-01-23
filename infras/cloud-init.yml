@@ -1,0 +1,53 @@
+#cloud-config
+package_upgrade: true
+packages:
+  - fontconfig
+  - openjdk-17-jre
+  - gnupg
+  - software-properties-common
+  - curl
+  - apt-transport-https
+  - ca-certificates
+  - software-properties-common
+  - docker.io
+runcmd:
+  # Install Jenkins
+  - wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+  - echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  - apt-get update
+  - apt-get install -y jenkins
+  - systemctl start jenkins
+  - systemctl enable jenkins
+
+  # Install Terraform
+  - curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+  - apt-get update
+  - apt-get install -y terraform
+
+  # Install Azure CLI
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+  # Install Trivy
+  - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+  - chmod +x /usr/local/bin/trivy
+
+  # Install Docker
+  - systemctl start docker
+  - systemctl enable docker
+
+  # Pull SonarQube image and run container
+  - docker pull sonarqube:latest
+  - docker run --name sonarqube-custom -p 9000:9000 sonarqube:community
+
+  # Pull Grafana image and run container
+  - docker pull grafana/grafana:latest
+  - docker run -d --name grafana -p 3000:3000 grafana/grafana:latest
+
+  # Pull Prometheus image and run container
+  - docker pull prom/prometheus:latest
+  - docker run -d --name prometheus -p 9090:9090 prom/prometheus:latest
+
+  # Example of using Trivy for a filesystem scan
+  - mkdir -p /trivy/reports
+  - trivy fs / > /trivy/reports/fs-scan-report.txt
