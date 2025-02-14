@@ -51,7 +51,7 @@ variable "aks_name" {
 variable "acr_name" {
   description = "acr name"
   type        = string
-  default     = "container registery"
+  default     = "containerregistery"
 }
 variable "role_definition_name" {
   description = "The role definition name for the role assignment"
