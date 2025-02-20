@@ -51,10 +51,19 @@ variable "aks_name" {
 variable "acr_name" {
   description = "acr name"
   type        = string
-  default     = "container registery"
+  default     = "containerregistery"
 }
 variable "role_definition_name" {
-  description = "The role definition name for the role assignment."
+  description = "The role definition name for the role assignment"
   type        = string
   default     = "AcrPull"
 }
+variable "vm_nsg" {
+  description = "virtual machine netwirk securuty group"
+  type        = string
+  default     = "vm-nsg"
+}
+
+
+
+

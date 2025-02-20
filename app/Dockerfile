@@ -17,5 +17,6 @@ EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 #API Key = b16e4234d2c524eb9b11ef4bdf139093
-#docker build --build-arg TMDB_V3_API_KEY=b16e4234d2c524eb9b11ef4bdf139093 -t netflix .
+#docker build --build-arg TMDB_V3_API_KEY=ba938bf5e37ad5fa1dcb8ae3654bc57c -t netflix .
 # docker run -d --name netflix -p 8081:80 netflix:latest
+#ba938bf5e37ad5fa1dcb8ae3654bc57c
