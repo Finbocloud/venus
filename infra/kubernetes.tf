@@ -13,13 +13,13 @@ resource "azurerm_kubernetes_cluster" "this_aks" {
   location            = azurerm_resource_group.this_rg.location
   resource_group_name = azurerm_resource_group.this_rg.name
   dns_prefix          = "akscluster"
-  kubernetes_version  = "1.31.5"#data.azurerm_kubernetes_service_versions.current.latest_version
+  kubernetes_version  = "1.32"#data.azurerm_kubernetes_service_versions.current.latest_version
   
   node_resource_group = "${azurerm_resource_group.this_rg.name}-network-rg"
   default_node_pool {
     name                 = "systempool"
     vm_size              = "Standard_DS2_v2"
-    orchestrator_version = "1.31.5" #data.azurerm_kubernetes_service_versions.current.version_prefix
+    orchestrator_version = "1.32" #data.azurerm_kubernetes_service_versions.current.version_prefix
     zones                = [1, 2, 3]
     auto_scaling_enabled  = true
     max_count            = 3
