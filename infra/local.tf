@@ -2,8 +2,8 @@ locals {
     owner = var.owner
     environment = var.environment
     tags = {
-        environment = "dev"
-        owner = "DevOps"
+        environment = var.environment
+        owner = var.owner
         managed-by = "terraform"
     }
 }

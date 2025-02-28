@@ -1,14 +1,14 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
-      version = "4.15.0"
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"  # Updated to latest stable version
     }
   }
 }
 
 provider "azurerm" {
-  subscription_id = "2ee241a3-3686-4588-bdd7-226f42aa2b20"
-  features{}
+  # Remove the hardcoded subscription_id and use az login instead
+  features {}
 }
   

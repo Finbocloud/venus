@@ -2,7 +2,7 @@ resource "azurerm_linux_virtual_machine" "this_linux_vm" {
   name                = "${local.owner}-${local.environment}-${var.linux_vm_name}"
   resource_group_name = azurerm_resource_group.this_rg.name
   location            = azurerm_resource_group.this_rg.location
-  size                = "Standard_F2"
+  size                = "Standard_D2s_v3"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.this_vm_nic.id,
@@ -34,7 +34,7 @@ custom_data = filebase64("${path.module}/cloud-init.yml")
 
 # Ensure public IP config is set and linked in network interface card
 # or
-# Option 2: Use Azure CLI to Get the Private IP (For Internal Access) If you don’t want to assign a public IP,
+# Option 2: Use Azure CLI to Get the Private IP (For Internal Access) If you don't want to assign a public IP,
 # you can access the VM from another Azure VM within the same virtual network:
 # az vm list-ip-addresses -g example-resources -n example-machine --query "[].virtualMachine.network.privateIpAddresses" -o tsv
 

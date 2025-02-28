@@ -26,3 +26,8 @@ resource "azurerm_public_ip" "this_publicip" {
 
   tags = local.tags
 }
+
+resource "azurerm_network_interface_security_group_association" "this_nsg_association" {
+  network_interface_id      = azurerm_network_interface.this_vm_nic.id
+  network_security_group_id = azurerm_network_security_group.this_nsg.id
+}
