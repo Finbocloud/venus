@@ -1,0 +1,15 @@
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Terraform provider cache
+.terraform/
+.terraform.lock.hcl
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# System-specific files
+.DS_Store
+Thumbs.db
