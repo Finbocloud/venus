@@ -5,6 +5,11 @@ terraform {
       version = "~> 3.0"  # Updated to latest stable version
     }
   }
+  backend "azurerm" {
+#    venusstorageaccount = "venusstorageaccount"
+#    container = "venusstatefile"
+#    key = "venus.tfstate"
+ }
 }
 
 provider "azurerm" {

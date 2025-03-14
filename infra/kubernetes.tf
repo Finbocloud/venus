@@ -21,7 +21,8 @@ resource "azurerm_kubernetes_cluster" "this_aks" {
     vm_size              = "Standard_DS2_v2"
     orchestrator_version = "1.30.9"
     zones                = [1, 2, 3]
-    enable_auto_scaling  = true
+    #enable_auto_scaling  = true
+    auto_scaling_enabled = true
     max_count            = 3
     min_count            = 1
     os_disk_size_gb      = 30
