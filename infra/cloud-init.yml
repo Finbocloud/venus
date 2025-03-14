@@ -1,0 +1,57 @@
+#cloud-config
+packages:
+  - fontconfig
+  - openjdk-17-jre
+  - wget
+  - apt-transport-https
+  - software-properties-common
+  - docker.io  # Required for SonarQube, Prometheus, and Grafana
+  - docker-compose
+
+runcmd:
+  - sudo apt update
+  - sudo apt install -y fontconfig openjdk-17-jre
+  - java -version
+
+  # Install Docker
+  - sudo apt-get install -y docker.io
+  - sudo systemctl start docker
+  - sudo systemctl enable docker
+  - sudo usermod -aG docker $USER
+
+  # Install Jenkins
+  - sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+  - echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  - sudo apt-get update
+  - sudo apt-get install -y jenkins
+
+  # Install Azure CLI
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+  # Install Terraform
+  - curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  - sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  - sudo apt-get update && sudo apt-get install -y terraform
+
+  # Install OWASP ZAP
+  - sudo apt-get install -y zaproxy
+
+  # Install SonarQube
+  # - sudo docker pull sonarqube:lts
+  # - sudo docker run -d --name sonarqube -p 9000:9000 sonarqube:lts
+
+ !
+  # Install Prometheus
+  - sudo useradd --no-create-home --shell /bin/false prometheus
+  - sudo mkdir /etc/prometheus /var/lib/prometheus
+  - sudo chown prometheus:prometheus /etc/prometheus /var/lib/prometheus
+  - sudo wget https://github.com/prometheus/prometheus/releases/latest/download/prometheus-linux-amd64.tar.gz
+  - sudo tar xvf prometheus-linux-amd64.tar.gz
+  - sudo mv prometheus-linux-amd64/prometheus /usr/local/bin/
+  - sudo mv prometheus-linux-amd64/promtool /usr/local/bin/
+  - sudo chown prometheus:prometheus /usr/local/bin/prometheus /usr/local/bin/promtool
+  - sudo rm -rf prometheus-linux-amd64*
+
+  # Install Grafana
+  - sudo docker pull grafana/grafana-oss
+  - sudo docker run -d --name=grafana -p 3000:3000 grafana/grafana-oss
