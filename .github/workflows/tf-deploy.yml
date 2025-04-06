@@ -27,12 +27,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: 7f65cb70-9698-4f9f-880a-6f0fbba1fac4
           tenant-id: c69d987e-184a-4d9f-8d4e-4c69fcce3605
           subscription-id: 2ee241a3-3686-4588-bdd7-226f42aa2b20
-          #client-secret: 0wr8Q~4TQZXLeEnb03QiOur.jiMvFFW~WBaorat6
           auth: "OIDC"
 
       - name: Set up Terraform
