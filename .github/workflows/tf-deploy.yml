@@ -33,6 +33,7 @@ jobs:
           tenant-id: c69d987e-184a-4d9f-8d4e-4c69fcce3605
           subscription-id: 2ee241a3-3686-4588-bdd7-226f42aa2b20
           #client-secret: 0wr8Q~4TQZXLeEnb03QiOur.jiMvFFW~WBaorat6
+          auth: "OIDC"
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
