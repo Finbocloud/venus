@@ -41,7 +41,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -backend-config="storage_account_name=venusstorageaccount" -backend-config="container_name=venusstatefile" -backend-config="key=venus.tfstate"
-        working-directory: /infra
+        working-directory: ./infra
         
       - name: Terraform Validate
         run: terraform validate
