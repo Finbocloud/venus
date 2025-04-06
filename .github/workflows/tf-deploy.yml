@@ -1,0 +1,56 @@
+name: Terraform Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Choose Terraform action'
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: 7f65cb70-9698-4f9f-880a-6f0fbba1fac4
+          tenant-id: c69d987e-184a-4d9f-8d4e-4c69fcce3605
+          subscription-id: 2ee241a3-3686-4588-bdd7-226f42aa2b20
+          client-secret: 0wr8Q~4TQZXLeEnb03QiOur.jiMvFFW~WBaorat6
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        run: terraform init -backend-config="storage_account_name=venusstorageaccount" -backend-config="container_name=venusstatefile" -backend-config="key=venus.tfstate"
+
+      - name: Terraform Validate
+        run: terraform validate
+
+#terraform plan
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.action == 'plan' }}
+        run: terraform plan -out=tfplan
+
+#trraform plan
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform apply -auto-approve tfplan
+
+#terraform apply
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve
