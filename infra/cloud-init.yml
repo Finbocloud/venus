@@ -24,6 +24,14 @@ runcmd:
   - echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
   - sudo apt-get update
   - sudo apt-get install -y jenkins
+  # Start and enable Jenkins service
+  - sudo systemctl daemon-reload
+  - sudo systemctl start jenkins
+  - sudo systemctl enable jenkins
+  # Wait for Jenkins to start up
+  #- sleep 30
+  # Get the initial admin password
+  #- sudo cat /var/lib/jenkins/secrets/initialAdminPassword || true
 
   # Install Azure CLI
   - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
@@ -40,7 +48,7 @@ runcmd:
   # - sudo docker pull sonarqube:lts
   # - sudo docker run -d --name sonarqube -p 9000:9000 sonarqube:lts
 
- !
+ 
   # Install Prometheus
   - sudo useradd --no-create-home --shell /bin/false prometheus
   - sudo mkdir /etc/prometheus /var/lib/prometheus
@@ -55,3 +63,14 @@ runcmd:
   # Install Grafana
   - sudo docker pull grafana/grafana-oss
   - sudo docker run -d --name=grafana -p 3000:3000 grafana/grafana-oss
+
+# CHECK IF APPS ARE INSTALLED
+# 1. For docker
+# sudo docker --version
+
+# 2. for Jenkins
+# systemctl status jenkins    # Check Jenkins service status
+# jenkins --version          # Check Jenkins version
+# curl localhost:8080        # Test if Jenkins web interface is responding
+
+# 3. 

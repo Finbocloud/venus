@@ -6,10 +6,11 @@ terraform {
     }
   }
   backend "azurerm" {
-#    venusstorageaccount = "venusstorageaccount"
-#    container = "venusstatefile"
-#    key = "venus.tfstate"
- }
+    storage_account_name = "venusstorageaccount"
+    container_name      = "venusstatefile"
+    key                 = "venus.tfstate"
+    resource_group_name = "DefaultResourceGroup-WEU"
+  }
 }
 
 provider "azurerm" {
