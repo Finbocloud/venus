@@ -13,7 +13,6 @@ on:
           - apply
           - destroy
 
-#  Permissions block (needed for Azure login using OIDC or client secret)
 permissions:
   id-token: write
   contents: read
@@ -24,7 +23,7 @@ jobs:
     defaults:
       run:
         working-directory: ./infra
-        
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
@@ -32,10 +31,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: 7f65cb70-9698-4f9f-880a-6f0fbba1fac4
-          tenant-id: c69d987e-184a-4d9f-8d4e-4c69fcce3605
-          subscription-id: 2ee241a3-3686-4588-bdd7-226f42aa2b20
-          client-secret: 0wr8Q~4TQZXLeEnb03QiOur.jiMvFFW~WBaorat6
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           auth: "OIDC"
 
       - name: Set up Terraform
@@ -45,23 +43,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -backend-config="storage_account_name=venusstorageaccount" -backend-config="container_name=venusstatefile" -backend-config="key=venus.tfstate"
-       
-        
+         
       - name: Terraform Validate
         run: terraform validate
-       
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.action == 'plan' }}
         run: terraform plan -out=tfplan
-       
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.action == 'apply' }}
         run: terraform apply -auto-approve tfplan
- 
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
-     
